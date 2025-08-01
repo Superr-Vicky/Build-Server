@@ -1945,6 +1945,10 @@ pub fn main_get_build_date() -> String {
     crate::BUILD_DATE.to_string()
 }
 
+pub fn main_get_reviser() -> String {
+    "Turing".to_string()
+}
+
 pub fn translate(name: String, locale: String) -> SyncReturn<String> {
     SyncReturn(crate::client::translate_locale(name, &locale))
 }

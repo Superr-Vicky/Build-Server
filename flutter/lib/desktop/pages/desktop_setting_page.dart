@@ -2187,17 +2187,20 @@ class _AboutState extends State<_About> {
     return futureBuilder(future: () async {
       final license = await bind.mainGetLicense();
       final version = await bind.mainGetVersion();
+      final reviser = await bind.mainGetReviser();
       final buildDate = await bind.mainGetBuildDate();
       final fingerprint = await bind.mainGetFingerprint();
       return {
         'license': license,
         'version': version,
+        'reviser': reviser,
         'buildDate': buildDate,
         'fingerprint': fingerprint
       };
     }(), hasData: (data) {
       final license = data['license'].toString();
       final version = data['version'].toString();
+      final reviser = data['reviser'].toString();
       final buildDate = data['buildDate'].toString();
       final fingerprint = data['fingerprint'].toString();
       const linkStyle = TextStyle(decoration: TextDecoration.underline);
@@ -2213,6 +2216,9 @@ class _AboutState extends State<_About> {
               ),
               SelectionArea(
                   child: Text('${translate('Version')}: $version')
+                      .marginSymmetric(vertical: 4.0)),
+              SelectionArea(
+                  child: Text('${translate('Reviser')}: $reviser')
                       .marginSymmetric(vertical: 4.0)),
               SelectionArea(
                   child: Text('${translate('Build Date')}: $buildDate')

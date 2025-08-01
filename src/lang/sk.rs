@@ -48,6 +48,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Privacy Statement", "Vyhlásenie o ochrane osobných údajov"),
         ("Mute", "Stíšiť"),
         ("Build Date", "Dátum zostavenia"),
+        ("Reviser", "Revisor"),
         ("Version", "Verzia"),
         ("Home", "Domov"),
         ("Audio Input", "Zvukový vstup"),

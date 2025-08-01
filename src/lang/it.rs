@@ -48,6 +48,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Privacy Statement", "Informativa sulla privacy"),
         ("Mute", "Audio disabilitato"),
         ("Build Date", "Data build"),
+        ("Reviser", "Revisore"),
         ("Version", "Versione"),
         ("Home", "Home"),
         ("Audio Input", "Ingresso audio"),

@@ -48,6 +48,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Privacy Statement", "Paziņojums par konfidencialitāti"),
         ("Mute", "Izslēgt skaņu"),
         ("Build Date", "Būvēšanas datums"),
+        ("Reviser", "Redaktors"),
         ("Version", "Versija"),
         ("Home", "Sākums"),
         ("Audio Input", "Audio ievade"),

@@ -86,6 +86,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
   var _localIP = "";
   var _directAccessPort = "";
   var _fingerprint = "";
+  var _reviser = "";
   var _buildDate = "";
   var _autoDisconnectTimeout = "";
   var _hideServer = false;
@@ -193,6 +194,12 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
       if (_fingerprint != fingerprint) {
         update = true;
         _fingerprint = fingerprint;
+      }
+
+      final reviser = await bind.mainGetReviser();
+      if (_reviser != reviser) {
+        update = true;
+        _reviser = reviser;
       }
 
       final buildDate = await bind.mainGetBuildDate();
@@ -843,6 +850,13 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
                       )),
                 ),
                 leading: Icon(Icons.info)),
+            SettingsTile(
+                title: Text(translate("Reviser")),
+                value: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Text(_reviser),
+                ),
+                leading: Icon(Icons.code)),
             SettingsTile(
                 title: Text(translate("Build Date")),
                 value: Padding(

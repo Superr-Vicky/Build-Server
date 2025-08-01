@@ -48,6 +48,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Privacy Statement", "კონფიდენციალურობის განაცხადი"),
         ("Mute", "ხმის გათიშვა"),
         ("Build Date", "აგების თარიღი"),
+        ("Reviser", "რედაქტორი"),
         ("Version", "ვერსია"),
         ("Home", "მთავარი"),
         ("Audio Input", "აუდიო შესავალი"),

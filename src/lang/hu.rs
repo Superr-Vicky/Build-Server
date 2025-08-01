@@ -48,6 +48,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Privacy Statement", "Adatvédelmi nyilatkozat"),
         ("Mute", "Némítás"),
         ("Build Date", "Összeállítás ideje"),
+        ("Reviser", "Felülvizsgáló"),
         ("Version", "Verzió"),
         ("Home", "Kezdőképernyő"),
         ("Audio Input", "Hangátvitel"),

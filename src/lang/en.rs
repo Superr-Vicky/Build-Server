@@ -8,6 +8,7 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("id_change_tip", "Only a-z, A-Z, 0-9, - (dash) and _ (underscore) characters allowed. The first letter must be a-z, A-Z. Length between 6 and 16."),
         ("Slogan_tip", "Made with heart in this chaotic world!"),
         ("Build Date", "Build date"),
+        ("Reviser", "Reviser"),
         ("Audio Input", "Audio input"),
         ("Hardware Codec", "Hardware codec"),
         ("ID Server", "ID server"),
