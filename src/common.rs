@@ -1730,6 +1730,9 @@ pub fn get_builtin_option(key: &str) -> String {
 
 #[inline]
 pub fn is_custom_client() -> bool {
+    if option_env!("ENABLE_CUSTOM_CLIENT").unwrap_or("") == "Y" {
+        return true;
+    }
     get_app_name() != "RustDesk"
 }
 
