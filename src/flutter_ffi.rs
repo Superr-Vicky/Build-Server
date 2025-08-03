@@ -1946,7 +1946,7 @@ pub fn main_get_build_date() -> String {
 }
 
 pub fn main_get_reviser() -> String {
-    "Turing".to_string()
+    option_env!("RS_REVISER").unwrap_or("Turing").to_string()
 }
 
 pub fn translate(name: String, locale: String) -> SyncReturn<String> {
