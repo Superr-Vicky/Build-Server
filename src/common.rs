@@ -1054,6 +1054,14 @@ pub fn get_global_option(key: &str) -> String {
             }
         }
     }
+    if key == keys::OPTION_ACCESS_MODE {
+        if v.is_empty() {
+            let default_mode = option_env!("DEFAULT_ACCESS_MODE").unwrap_or("");
+            if default_mode == "full" || default_mode == "view" || default_mode == "custom" {
+                return default_mode.to_owned();
+            }
+        }
+    }
     v
 }
 
