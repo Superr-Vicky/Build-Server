@@ -1045,6 +1045,18 @@ pub fn get_local_option(key: &str) -> String {
     v
 }
 
+pub fn get_global_option(key: &str) -> String {
+    let v = Config::get_option(key);
+    if key == keys::OPTION_DIRECT_SERVER {
+        if v.is_empty() {
+            if option_env!("DEFAULT_DIRECT_SERVER").unwrap_or("") == "Y" {
+                return "Y".to_owned();
+            }
+        }
+    }
+    v
+}
+
 pub fn get_audit_server(api: String, custom: String, typ: String) -> String {
     let url = get_api_server(api, custom);
     if url.is_empty() || is_public(&url) {
