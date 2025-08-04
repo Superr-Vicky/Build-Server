@@ -1743,6 +1743,12 @@ pub fn get_builtin_option(key: &str) -> String {
     if key == "hide-powered-by-me" && option_env!("HIDE_POWERED_BY_ME").unwrap_or("") == "Y" {
         return "Y".to_string();
     }
+    if key == "unlock-security-settings" && option_env!("UNLOCK_SECURITY_SETTINGS").unwrap_or("") == "Y" {
+        return "Y".to_string();
+    }
+    if key == "unlock-network-settings" && option_env!("UNLOCK_NETWORK_SETTINGS").unwrap_or("") == "Y" {
+        return "Y".to_string();
+    }
     config::BUILTIN_SETTINGS
         .read()
         .unwrap()
