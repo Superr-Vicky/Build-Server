@@ -1547,6 +1547,15 @@ pub fn rustdesk_interval(i: Interval) -> ThrottledInterval {
 }
 
 pub fn load_custom_client() {
+    if let Some(conn_type) = option_env!("CONN_TYPE") {
+        if !conn_type.is_empty() && (conn_type == "incoming" || conn_type == "outgoing") {
+            config::HARD_SETTINGS
+                .write()
+                .unwrap()
+                .insert("conn-type".to_string(), conn_type.to_string());
+        }
+    }
+
     #[cfg(debug_assertions)]
     if let Ok(data) = std::fs::read_to_string("./custom.txt") {
         read_custom_client(data.trim());
