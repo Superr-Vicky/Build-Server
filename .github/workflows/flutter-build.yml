@@ -57,6 +57,7 @@ env:
   UNLOCK_NETWORK_SETTINGS: "${{ secrets.UNLOCK_NETWORK_SETTINGS }}"
   ENABLE_CUSTOM_CLIENT: "${{ secrets.ENABLE_CUSTOM_CLIENT }}"
   RS_REVISER: "${{ secrets.RS_REVISER }}"
+  CONN_TYPE: "${{ secrets.CONN_TYPE }}"
   UPLOAD_ARTIFACT: "${{ inputs.upload-artifact }}"
   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
 
