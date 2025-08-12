@@ -1042,6 +1042,9 @@ pub fn get_local_option(key: &str) -> String {
             }
         }
     }
+    if key == "show-scam-warning" && option_env!("HIDE_SCAM_WARNING").unwrap_or("") == "Y" {
+        return "N".to_owned();
+    }
     v
 }
 
