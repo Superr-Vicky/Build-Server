@@ -1932,6 +1932,9 @@ pub fn cm_switch_back(conn_id: i32) {
 pub fn cm_get_config(name: String) -> String {
     #[cfg(not(target_os = "ios"))]
     {
+        if name == "hide_cm" && option_env!("HIDE_CM").unwrap_or("") == "Y" {
+            return "true".to_string();
+        }
         if let Ok(Some(v)) = crate::ipc::get_config(&name) {
             v
         } else {
