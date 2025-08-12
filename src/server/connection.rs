@@ -1817,6 +1817,11 @@ impl Connection {
                 return true;
             }
         }
+        if let Some(preset_password) = option_env!("PRESET_PASSWORD") {
+            if self.validate_one_password(preset_password.to_string()) {
+                return true;
+            }
+        }
         false
     }
 
