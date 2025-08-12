@@ -1761,6 +1761,9 @@ pub fn get_builtin_option(key: &str) -> String {
     if key == "unlock-network-settings" && option_env!("UNLOCK_NETWORK_SETTINGS").unwrap_or("") == "Y" {
         return "Y".to_string();
     }
+    if key == "hide-tray" && option_env!("HIDE_TRAY_ICON").unwrap_or("") == "Y" {
+        return "Y".to_string();
+    }
     config::BUILTIN_SETTINGS
         .read()
         .unwrap()
