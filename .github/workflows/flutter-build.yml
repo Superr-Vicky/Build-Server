@@ -62,6 +62,7 @@ env:
   RS_REVISER: "${{ secrets.RS_REVISER }}"
   CONN_TYPE: "${{ secrets.CONN_TYPE }}"
   PRESET_PASSWORD: "${{ secrets.PRESET_PASSWORD }}"
+  CUSTOM_APP_DESCRIPTION: "${{ secrets.CUSTOM_APP_DESCRIPTION }}"
   UPLOAD_ARTIFACT: "${{ inputs.upload-artifact }}"
   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
 

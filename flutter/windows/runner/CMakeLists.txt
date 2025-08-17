@@ -27,6 +27,11 @@ target_compile_definitions(${BINARY_NAME} PRIVATE "FLUTTER_VERSION_MINOR=${FLUTT
 target_compile_definitions(${BINARY_NAME} PRIVATE "FLUTTER_VERSION_PATCH=${FLUTTER_VERSION_PATCH}")
 target_compile_definitions(${BINARY_NAME} PRIVATE "FLUTTER_VERSION_BUILD=${FLUTTER_VERSION_BUILD}")
 
+# Add preprocessor definitions for custom app description.
+if(DEFINED ENV{CUSTOM_APP_DESCRIPTION})
+  target_compile_definitions(${BINARY_NAME} PRIVATE "CUSTOM_APP_DESCRIPTION=\"$ENV{CUSTOM_APP_DESCRIPTION}\"")
+endif()
+
 # Disable Windows macros that collide with C++ standard library functions.
 target_compile_definitions(${BINARY_NAME} PRIVATE "NOMINMAX")
 
