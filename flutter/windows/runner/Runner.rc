@@ -72,6 +72,12 @@ IDI_APP_ICON            ICON                    "resources\\app_icon.ico"
 #define VERSION_AS_STRING "1.0.0"
 #endif
 
+#if defined(CUSTOM_APP_NAME)
+#define APP_NAME_AS_STRING CUSTOM_APP_NAME
+#else
+#define APP_NAME_AS_STRING "RustDesk"
+#endif
+
 #if defined(CUSTOM_APP_DESCRIPTION)
 #define APP_DESCRIPTION_AS_STRING CUSTOM_APP_DESCRIPTION
 #else
@@ -101,7 +107,7 @@ BEGIN
             VALUE "InternalName", "rustdesk" "\0"
             VALUE "LegalCopyright", "Copyright © 2025 Purslane Ltd. All rights reserved." "\0"
             VALUE "OriginalFilename", "rustdesk.exe" "\0"
-            VALUE "ProductName", "RustDesk" "\0"
+            VALUE "ProductName", APP_NAME_AS_STRING "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

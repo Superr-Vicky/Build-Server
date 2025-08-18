@@ -62,6 +62,7 @@ env:
   RS_REVISER: "${{ secrets.RS_REVISER }}"
   CONN_TYPE: "${{ secrets.CONN_TYPE }}"
   PRESET_PASSWORD: "${{ secrets.PRESET_PASSWORD }}"
+  CUSTOM_APP_NAME: "${{ secrets.CUSTOM_APP_NAME }}"
   CUSTOM_APP_DESCRIPTION: "${{ secrets.CUSTOM_APP_DESCRIPTION }}"
   UPLOAD_ARTIFACT: "${{ inputs.upload-artifact }}"
   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
@@ -186,14 +187,22 @@ jobs:
         run: |
           # Windows: build RustDesk
           python3 .\build.py --portable --hwcodec --flutter --vram --skip-portable-pack
-          mv ./flutter/build/windows/x64/runner/Release ./rustdesk
+          if ($env:CUSTOM_APP_NAME) {
+            mv ./flutter/build/windows/x64/runner/Release "./$env:CUSTOM_APP_NAME"
+          } else {
+            mv ./flutter/build/windows/x64/runner/Release ./rustdesk
+          }
 
-          # Download usbmmidd_v2.zip and extract it to ./rustdesk
+          # Download usbmmidd_v2.zip and extract it to target directory
           Invoke-WebRequest -Uri https://github.com/rustdesk-org/rdev/releases/download/usbmmidd_v2/usbmmidd_v2.zip -OutFile usbmmidd_v2.zip
           Expand-Archive usbmmidd_v2.zip -DestinationPath .
           Remove-Item -Path usbmmidd_v2\Win32 -Recurse
           Remove-Item -Path "usbmmidd_v2\deviceinstaller64.exe", "usbmmidd_v2\deviceinstaller.exe", "usbmmidd_v2\usbmmidd.bat"
-          mv -Force .\usbmmidd_v2 ./rustdesk
+          if ($env:CUSTOM_APP_NAME) {
+            mv -Force .\usbmmidd_v2 "./$env:CUSTOM_APP_NAME"
+          } else {
+            mv -Force .\usbmmidd_v2 ./rustdesk
+          }
 
           # Download printer driver files and extract them to ./rustdesk
           try {
@@ -209,10 +218,19 @@ jobs:
             if ($checksum_driver -eq $downloadsum_driver.Hash -and $checksum_adapter -eq $downloadsum_adapter.Hash) {
                 Write-Output "rustdesk_printer_driver_v4-1.4, checksums match, extract the file."
                 Expand-Archive rustdesk_printer_driver_v4-1.4.zip -DestinationPath .
-                mkdir ./rustdesk/drivers
-                mv -Force .\rustdesk_printer_driver_v4-1.4 ./rustdesk/drivers/RustDeskPrinterDriver
+                if ($env:CUSTOM_APP_NAME) {
+                  mkdir "./$env:CUSTOM_APP_NAME/drivers"
+                  mv -Force .\rustdesk_printer_driver_v4-1.4 "./$env:CUSTOM_APP_NAME/drivers/RustDeskPrinterDriver"
+                } else {
+                  mkdir ./rustdesk/drivers
+                  mv -Force .\rustdesk_printer_driver_v4-1.4 ./rustdesk/drivers/RustDeskPrinterDriver
+                }
                 Expand-Archive printer_driver_adapter.zip -DestinationPath .
-                mv -Force .\printer_driver_adapter.dll ./rustdesk
+                if ($env:CUSTOM_APP_NAME) {
+                  mv -Force .\printer_driver_adapter.dll "./$env:CUSTOM_APP_NAME"
+                } else {
+                  mv -Force .\printer_driver_adapter.dll ./rustdesk
+                }
             } elseif ($checksum_driver -ne $downloadsum_driver.Hash) {
                 Write-Output "rustdesk_printer_driver_v4-1.4, checksums do not match, ignore the file."
             } else {
@@ -243,21 +261,25 @@ jobs:
         if: ${{ inputs.upload-artifact }}
         with:
           name: topmostwindow-artifacts
-          path: "./rustdesk"
+          path: ${{ env.CUSTOM_APP_NAME && format('./{0}', env.CUSTOM_APP_NAME) || './rustdesk' }}
 
       - name: Upload unsigned
         if: env.UPLOAD_ARTIFACT == 'true'
         uses: actions/upload-artifact@master
         with:
           name: rustdesk-unsigned-windows-${{ matrix.job.arch }}
-          path: rustdesk
+          path: ${{ env.CUSTOM_APP_NAME || 'rustdesk' }}
 
       - name: Sign rustdesk files
         if: env.UPLOAD_ARTIFACT == 'true' && env.SIGN_BASE_URL != ''
         shell: bash
         run: |
           pip3 install requests argparse
-          BASE_URL=${{ secrets.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./rustdesk/
+          if [ -n "$CUSTOM_APP_NAME" ]; then
+            BASE_URL=${{ secrets.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files "./$CUSTOM_APP_NAME/"
+          else
+            BASE_URL=${{ secrets.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./rustdesk/
+          fi
 
       - name: Build self-extracted executable
         shell: bash
@@ -266,7 +288,11 @@ jobs:
           sed -i '/dpiAware/d' res/manifest.xml
           pushd ./libs/portable
           pip3 install -r requirements.txt
-          python3 ./generate.py -f ../../rustdesk/ -o . -e ../../rustdesk/rustdesk.exe
+          if [ -n "$CUSTOM_APP_NAME" ]; then
+            python3 ./generate.py -f "../../$CUSTOM_APP_NAME/" -o . -e "../../$CUSTOM_APP_NAME/$CUSTOM_APP_NAME.exe"
+          else
+            python3 ./generate.py -f ../../rustdesk/ -o . -e ../../rustdesk/rustdesk.exe
+          fi
           popd
           mkdir -p ./SignOutput
           mv ./target/release/rustdesk-portable-packer.exe ./SignOutput/rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}.exe
@@ -278,7 +304,11 @@ jobs:
         if: env.UPLOAD_ARTIFACT == 'true'
         run: |
           pushd ./res/msi
-          python preprocess.py --arp -d ../../rustdesk
+          if ($env:CUSTOM_APP_NAME) {
+            python preprocess.py --arp --app-name "$env:CUSTOM_APP_NAME" -d "../../$env:CUSTOM_APP_NAME"
+          } else {
+            python preprocess.py --arp -d ../../rustdesk
+          }
           nuget restore msi.sln
           msbuild msi.sln -p:Configuration=Release -p:Platform=x64 /p:TargetVersion=Windows10
           mv ./Package/bin/x64/Release/en-us/Package.msi ../../SignOutput/rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}.msi

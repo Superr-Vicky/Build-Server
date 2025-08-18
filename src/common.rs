@@ -921,6 +921,11 @@ pub async fn do_check_software_update() -> hbb_common::ResultType<()> {
 
 #[inline]
 pub fn get_app_name() -> String {
+    if let Some(custom_app_name) = option_env!("CUSTOM_APP_NAME") {
+        if !custom_app_name.is_empty() {
+            return custom_app_name.to_string();
+        }
+    }
     hbb_common::config::APP_NAME.read().unwrap().clone()
 }
 

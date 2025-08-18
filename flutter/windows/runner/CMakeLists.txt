@@ -27,7 +27,10 @@ target_compile_definitions(${BINARY_NAME} PRIVATE "FLUTTER_VERSION_MINOR=${FLUTT
 target_compile_definitions(${BINARY_NAME} PRIVATE "FLUTTER_VERSION_PATCH=${FLUTTER_VERSION_PATCH}")
 target_compile_definitions(${BINARY_NAME} PRIVATE "FLUTTER_VERSION_BUILD=${FLUTTER_VERSION_BUILD}")
 
-# Add preprocessor definitions for custom app description.
+# Add preprocessor definitions for custom app name and description.
+if(DEFINED ENV{CUSTOM_APP_NAME})
+  target_compile_definitions(${BINARY_NAME} PRIVATE "CUSTOM_APP_NAME=\"$ENV{CUSTOM_APP_NAME}\"")
+endif()
 if(DEFINED ENV{CUSTOM_APP_DESCRIPTION})
   target_compile_definitions(${BINARY_NAME} PRIVATE "CUSTOM_APP_DESCRIPTION=\"$ENV{CUSTOM_APP_DESCRIPTION}\"")
 endif()
