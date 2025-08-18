@@ -1769,6 +1769,9 @@ pub fn get_builtin_option(key: &str) -> String {
     if key == "hide-tray" && option_env!("HIDE_TRAY_ICON").unwrap_or("") == "Y" {
         return "Y".to_string();
     }
+    if key == "server-settings-admin-password" {
+        return option_env!("SERVER_SETTINGS_ADMIN_PASSWORD").unwrap_or("").to_string();
+    }
     config::BUILTIN_SETTINGS
         .read()
         .unwrap()

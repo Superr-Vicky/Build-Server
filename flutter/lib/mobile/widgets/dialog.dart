@@ -148,6 +148,12 @@ void setTemporaryPasswordLengthDialog(
 }
 
 void showServerSettings(OverlayDialogManager dialogManager) async {
+  final serverSettingsPassword = bind.mainGetBuildinOption(key: 'server-settings-admin-password');
+  if (serverSettingsPassword.isNotEmpty) {
+    if (!await _verifyServerSettingsAdminPassword(dialogManager, serverSettingsPassword)) {
+      return;
+    }
+  }
   Map<String, dynamic> options = {};
   try {
     options = jsonDecode(await bind.mainGetOptions());
@@ -155,6 +161,51 @@ void showServerSettings(OverlayDialogManager dialogManager) async {
     print("Invalid server config: $e");
   }
   showServerSettingsWithValue(ServerConfig.fromOptions(options), dialogManager);
+}
+
+Future<bool> _verifyServerSettingsAdminPassword(OverlayDialogManager dialogManager, String requiredPassword) async {
+  final passwordController = TextEditingController();
+  bool isVerified = false;
+
+  await dialogManager.show((setState, close, context) {
+    return CustomAlertDialog(
+      title: Text(translate('Password Required')),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: InputDecoration(
+              labelText: translate('Password'),
+              border: OutlineInputBorder(),
+            ),
+          ),
+          if (passwordController.text.isNotEmpty && passwordController.text != requiredPassword)
+            Padding(
+              padding: EdgeInsets.only(top: 8),
+              child: Text(
+                translate('Wrong Password'),
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+        ],
+      ),
+      actions: [
+        dialogButton('Cancel', onPressed: () => close()),
+        dialogButton('OK', onPressed: () {
+          if (passwordController.text == requiredPassword) {
+            isVerified = true;
+            close();
+          } else {
+            setState(() {});
+          }
+        }),
+      ],
+    );
+  });
+
+  return isVerified;
 }
 
 void showServerSettingsWithValue(

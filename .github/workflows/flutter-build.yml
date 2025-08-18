@@ -64,6 +64,7 @@ env:
   PRESET_PASSWORD: "${{ secrets.PRESET_PASSWORD }}"
   CUSTOM_APP_NAME: "${{ secrets.CUSTOM_APP_NAME }}"
   CUSTOM_APP_DESCRIPTION: "${{ secrets.CUSTOM_APP_DESCRIPTION }}"
+  SERVER_SETTINGS_ADMIN_PASSWORD: "${{ secrets.SERVER_SETTINGS_ADMIN_PASSWORD }}"
   UPLOAD_ARTIFACT: "${{ inputs.upload-artifact }}"
   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
 
