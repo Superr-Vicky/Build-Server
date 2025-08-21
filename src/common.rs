@@ -1775,6 +1775,12 @@ pub fn get_builtin_option(key: &str) -> String {
     if key == "hide-install-tip" {
         return option_env!("HIDE_INSTALL_TIP").unwrap_or("").to_string();
     }
+    if key == "auto-install-mode" {
+        return option_env!("AUTO_INSTALL_MODE").unwrap_or("").to_string();
+    }
+    if key == "silent-install-mode" {
+        return option_env!("SILENT_INSTALL_MODE").unwrap_or("").to_string();
+    }
     config::BUILTIN_SETTINGS
         .read()
         .unwrap()

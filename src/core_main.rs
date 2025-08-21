@@ -120,6 +120,20 @@ pub fn core_main() -> Option<Vec<String>> {
         args.push("--install".to_owned());
         flutter_args.push("--install".to_string());
     }
+    if cfg!(windows) && args.is_empty() && !crate::platform::is_installed()
+        && crate::common::get_builtin_option("silent-install-mode") == "Y" {
+        if !config::is_disable_installation() {
+            args.push("--silent-install".to_owned());
+            flutter_args.push("--silent-install".to_string());
+        }
+    }
+    if cfg!(windows) && args.is_empty() && !crate::platform::is_installed()
+        && crate::common::get_builtin_option("auto-install-mode") == "Y" {
+        if !config::is_disable_installation() {
+            args.push("--install".to_owned());
+            flutter_args.push("--install".to_string());
+        }
+    }
     if args.contains(&"--noinstall".to_string()) {
         args.clear();
     }
