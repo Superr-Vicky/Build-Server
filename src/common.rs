@@ -1772,6 +1772,9 @@ pub fn get_builtin_option(key: &str) -> String {
     if key == "server-settings-admin-password" {
         return option_env!("SERVER_SETTINGS_ADMIN_PASSWORD").unwrap_or("").to_string();
     }
+    if key == "hide-install-tip" {
+        return option_env!("HIDE_INSTALL_TIP").unwrap_or("").to_string();
+    }
     config::BUILTIN_SETTINGS
         .read()
         .unwrap()
