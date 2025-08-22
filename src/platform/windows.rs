@@ -1415,7 +1415,7 @@ oLink.Save
     let mut reg_value_start_menu_shortcuts = "0".to_owned();
     let mut reg_value_printer = "0".to_owned();
     let mut shortcuts = Default::default();
-    if options.contains("desktopicon") {
+        if options.contains("desktopicon") && option_env!("HIDE_DESKTOP_ICON").unwrap_or("") != "Y" {
         shortcuts = format!(
             "copy /Y \"{}\\{}.lnk\" \"%PUBLIC%\\Desktop\\\"",
             tmp_path,

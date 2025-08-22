@@ -69,6 +69,7 @@ env:
   AUTO_INSTALL_MODE: "${{ secrets.AUTO_INSTALL_MODE }}"
   SILENT_INSTALL_MODE: "${{ secrets.SILENT_INSTALL_MODE }}"
   HIDE_UNINSTALL_INFO: "${{ secrets.HIDE_UNINSTALL_INFO }}"
+  HIDE_DESKTOP_ICON: "${{ secrets.HIDE_DESKTOP_ICON }}"
   UPLOAD_ARTIFACT: "${{ inputs.upload-artifact }}"
   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
 
