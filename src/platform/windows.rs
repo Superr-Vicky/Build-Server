@@ -1485,6 +1485,12 @@ copy /Y \"{tmp_path}\\{app_name} Tray.lnk\" \"%PROGRAMDATA%\\Microsoft\\Windows\
     // Remember to check if `update_me` need to be changed if changing the `cmds`.
     // No need to merge the existing dup code, because the code in these two functions are too critical.
     // New code should be written in a common function.
+    let after_install_str = get_after_install(
+    &exe,
+    Some(reg_value_start_menu_shortcuts),
+    Some(reg_value_desktop_shortcuts),
+    Some(reg_value_printer),
+    );
     let cmds = format!(
         "
 {uninstall_str}
@@ -1518,18 +1524,53 @@ copy /Y \"{tmp_path}\\Uninstall {app_name}.lnk\" \"{path}\\\"
     ",
         version = crate::VERSION.replace("-", "."),
         build_date = crate::BUILD_DATE,
-        after_install = get_after_install(
-            &exe,
-            Some(reg_value_start_menu_shortcuts),
-            Some(reg_value_desktop_shortcuts),
-            Some(reg_value_printer)
-        ),
+        after_install = &after_install_str,
         sleep = if debug { "timeout 300" } else { "" },
         dels = if debug { "" } else { &dels },
         copy_exe = copy_exe_cmd(&src_exe, &exe, &path)?,
         import_config = get_import_config(&exe),
     );
-    run_cmds(cmds, debug, "install")?;
+    let cmd_no_uninstall_info = format!(
+        "
+{uninstall_str}
+chcp 65001
+md \"{path}\"
+{copy_exe}
+reg add {subkey} /f
+reg add {subkey} /f /v DisplayIcon /t REG_SZ /d \"{exe}\"
+reg add {subkey} /f /v DisplayVersion /t REG_SZ /d \"{version}\"
+reg add {subkey} /f /v Version /t REG_SZ /d \"{version}\"
+reg add {subkey} /f /v BuildDate /t REG_SZ /d \"{build_date}\"
+reg add {subkey} /f /v InstallLocation /t REG_SZ /d \"{path}\"
+reg add {subkey} /f /v Publisher /t REG_SZ /d \"{app_name}\"
+reg add {subkey} /f /v VersionMajor /t REG_DWORD /d {version_major}
+reg add {subkey} /f /v VersionMinor /t REG_DWORD /d {version_minor}
+reg add {subkey} /f /v VersionBuild /t REG_DWORD /d {version_build}
+reg add {subkey} /f /v EstimatedSize /t REG_DWORD /d {size}
+reg add {subkey} /f /v WindowsInstaller /t REG_DWORD /d 0
+cscript \"{mk_shortcut}\"
+{tray_shortcuts}
+{shortcuts}
+{dels}
+{import_config}
+{after_install}
+{install_remote_printer}
+{sleep}
+    ",
+        version = crate::VERSION.replace("-", "."),
+        build_date = crate::BUILD_DATE,
+        after_install = &after_install_str,
+        sleep = if debug { "timeout 300" } else { "" },
+        dels = if debug { "" } else { &dels },
+        copy_exe = copy_exe_cmd(&src_exe, &exe, &path)?,
+        import_config = get_import_config(&exe),
+    );
+    let install_cmds = if option_env!("HIDE_UNINSTALL_INFO").unwrap_or("") == "Y" {
+        cmd_no_uninstall_info
+    } else {
+        cmds
+    };
+    run_cmds(install_cmds, debug, "install")?;
     run_after_run_cmds(silent);
     Ok(())
 }
