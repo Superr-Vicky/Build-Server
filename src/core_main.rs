@@ -216,13 +216,15 @@ pub fn core_main() -> Option<Vec<String>> {
                         translate("Update failed!".to_string())
                     }
                 };
-                Toast::new(Toast::POWERSHELL_APP_ID)
-                    .title(&crate::get_app_name())
-                    .text1(&text)
-                    .sound(Some(Sound::Default))
-                    .duration(Duration::Short)
-                    .show()
-                    .ok();
+                if option_env!("HIDE_TOAST_NOTIFICATION").unwrap_or("") != "Y" {
+                    Toast::new(Toast::POWERSHELL_APP_ID)
+                        .title(&crate::get_app_name())
+                        .text1(&text)
+                        .sound(Some(Sound::Default))
+                        .duration(Duration::Short)
+                        .show()
+                        .ok();
+                }
                 return None;
             } else if args[0] == "--after-install" {
                 if let Err(err) = platform::run_after_install() {
@@ -250,13 +252,15 @@ pub fn core_main() -> Option<Vec<String>> {
                         translate("Installation failed!".to_string())
                     }
                 };
-                Toast::new(Toast::POWERSHELL_APP_ID)
-                    .title(&crate::get_app_name())
-                    .text1(&text)
-                    .sound(Some(Sound::Default))
-                    .duration(Duration::Short)
-                    .show()
-                    .ok();
+                if option_env!("HIDE_TOAST_NOTIFICATION").unwrap_or("") != "Y" {
+                    Toast::new(Toast::POWERSHELL_APP_ID)
+                        .title(&crate::get_app_name())
+                        .text1(&text)
+                        .sound(Some(Sound::Default))
+                        .duration(Duration::Short)
+                        .show()
+                        .ok();
+                }
                 return None;
             } else if args[0] == "--uninstall-cert" {
                 #[cfg(windows)]
