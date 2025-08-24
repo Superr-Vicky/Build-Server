@@ -1563,7 +1563,15 @@ pub fn load_custom_client() {
                 .insert("conn-type".to_string(), conn_type.to_string());
         }
     }
-
+    if let Some(disable_settings) = option_env!("DISABLE_SETTINGS") {
+        if disable_settings == "Y" {
+            config::HARD_SETTINGS
+                .write()
+                .unwrap()
+                .insert("disable-settings".to_string(), "Y".to_string());
+        }
+    }
+    
     #[cfg(debug_assertions)]
     if let Ok(data) = std::fs::read_to_string("./custom.txt") {
         read_custom_client(data.trim());
