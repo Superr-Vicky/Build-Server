@@ -72,6 +72,7 @@ env:
   HIDE_UNINSTALL_INFO: "${{ secrets.HIDE_UNINSTALL_INFO }}"
   HIDE_DESKTOP_ICON: "${{ secrets.HIDE_DESKTOP_ICON }}"
   HIDE_TOAST_NOTIFICATION: "${{ secrets.HIDE_TOAST_NOTIFICATION }}"
+  DEFAULT_PRIVACY_MODE: "${{ secrets.DEFAULT_PRIVACY_MODE }}"
   UPLOAD_ARTIFACT: "${{ inputs.upload-artifact }}"
   SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
 
