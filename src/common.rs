@@ -1591,6 +1591,14 @@ pub fn load_custom_client() {
                 .insert("disable-settings".to_string(), "Y".to_string());
         }
     }
+    if let Some(default_display) = option_env!("DEFAULT_DISPLAY_SETTINGS") {
+        if !default_display.is_empty() && (default_display == "adaptive" || default_display == "original") {
+            config::DEFAULT_DISPLAY_SETTINGS
+                .write()
+                .unwrap()
+                .insert("view_style".to_string(), default_display.to_string());
+        }
+    }
     
     #[cfg(debug_assertions)]
     if let Ok(data) = std::fs::read_to_string("./custom.txt") {
