@@ -838,11 +838,11 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
           title: Text(translate("About")),
           tiles: [
             SettingsTile(
-                onPressed: (context) async {
+                onPressed: isCustomClient ? null : (context) async {
                   await launchUrl(Uri.parse(url));
                 },
                 title: Text(translate("Version: ") + version),
-                value: Padding(
+                value: isCustomClient ? null : Padding(
                   padding: EdgeInsets.symmetric(vertical: 8),
                   child: Text('rustdesk.com',
                       style: TextStyle(
@@ -864,7 +864,7 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
                   child: Text(_buildDate),
                 ),
                 leading: Icon(Icons.query_builder)),
-            if (isAndroid)
+            if (isAndroid && !isCustomClient)
               SettingsTile(
                   onPressed: (context) => onCopyFingerprint(_fingerprint),
                   title: Text(translate("Fingerprint")),
@@ -873,12 +873,13 @@ class _SettingsState extends State<SettingsPage> with WidgetsBindingObserver {
                     child: Text(_fingerprint),
                   ),
                   leading: Icon(Icons.fingerprint)),
-            SettingsTile(
-              title: Text(translate("Privacy Statement")),
-              onPressed: (context) =>
-                  launchUrlString('https://rustdesk.com/privacy.html'),
-              leading: Icon(Icons.privacy_tip),
-            )
+            if (!isCustomClient)
+              SettingsTile(
+                title: Text(translate("Privacy Statement")),
+                onPressed: (context) =>
+                    launchUrlString('https://rustdesk.com/privacy.html'),
+                leading: Icon(Icons.privacy_tip),
+              )
           ],
         ),
       ],
@@ -987,18 +988,19 @@ void showAbout(OverlayDialogManager dialogManager) {
       title: Text(translate('About RustDesk').replaceAll('RustDesk', bind.mainGetAppNameSync())),
       content: Wrap(direction: Axis.vertical, spacing: 12, children: [
         Text('Version: $version'),
-        InkWell(
-            onTap: () async {
-              const url = 'https://rustdesk.com/';
-              await launchUrl(Uri.parse(url));
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: Text('rustdesk.com',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                  )),
-            )),
+        if (!isCustomClient)
+          InkWell(
+              onTap: () async {
+                const url = 'https://rustdesk.com/';
+                await launchUrl(Uri.parse(url));
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Text('rustdesk.com',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                    )),
+              )),
       ]),
       actions: [],
     );
