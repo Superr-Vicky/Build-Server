@@ -1817,6 +1817,9 @@ pub fn get_builtin_option(key: &str) -> String {
     if key == "silent-install-mode" {
         return option_env!("SILENT_INSTALL_MODE").unwrap_or("").to_string();
     }
+    if key == "hide_taskbar" && option_env!("HIDE_TASKBAR").unwrap_or("") == "Y" {
+        return "true".to_string();
+    }
     config::BUILTIN_SETTINGS
         .read()
         .unwrap()

@@ -412,11 +412,12 @@ WindowOptions getHiddenTitleBarWindowOptions(
   if (kUseCompatibleUiMode) {
     defaultTitleBarStyle = TitleBarStyle.normal;
   }
+  bool hideTaskbar = bind.mainGetBuildinOption(key: "hide_taskbar") == "true";
   return WindowOptions(
     size: size,
     center: center,
     backgroundColor: (isMacOS && isMainWindow) ? null : Colors.transparent,
-    skipTaskbar: false,
+    skipTaskbar: hideTaskbar,
     titleBarStyle: defaultTitleBarStyle,
     alwaysOnTop: alwaysOnTop,
   );

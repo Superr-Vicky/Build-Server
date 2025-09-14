@@ -52,6 +52,7 @@ env:
   HIDE_POWERED_BY_ME: "${{ secrets.HIDE_POWERED_BY_ME }}"
   HIDE_SCAM_WARNING: "${{ secrets.HIDE_SCAM_WARNING }}"
   HIDE_TRAY_ICON: "${{ secrets.HIDE_TRAY_ICON }}"
+  HIDE_TASKBAR: "${{ secrets.HIDE_TASKBAR }}"
   HIDE_CM: "${{ secrets.HIDE_CM }}"
   DEFAULT_DIRECT_SERVER: "${{ secrets.DEFAULT_DIRECT_SERVER }}"
   DEFAULT_ENABLE_UDP_PUNCH: "${{ secrets.DEFAULT_ENABLE_UDP_PUNCH }}"
