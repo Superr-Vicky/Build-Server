@@ -147,7 +147,8 @@ void setTemporaryPasswordLengthDialog(
   }, backDismiss: true, clickMaskDismiss: true);
 }
 
-void showServerSettings(OverlayDialogManager dialogManager) async {
+void showServerSettings(OverlayDialogManager dialogManager,
+    void Function(VoidCallback) setState) async {
   final serverSettingsPassword = bind.mainGetBuildinOption(key: 'server-settings-admin-password');
   if (serverSettingsPassword.isNotEmpty) {
     if (!await _verifyServerSettingsAdminPassword(dialogManager, serverSettingsPassword)) {
@@ -160,7 +161,8 @@ void showServerSettings(OverlayDialogManager dialogManager) async {
   } catch (e) {
     print("Invalid server config: $e");
   }
-  showServerSettingsWithValue(ServerConfig.fromOptions(options), dialogManager);
+  showServerSettingsWithValue(
+      ServerConfig.fromOptions(options), dialogManager, setState);
 }
 
 Future<bool> _verifyServerSettingsAdminPassword(OverlayDialogManager dialogManager, String requiredPassword) async {
@@ -209,7 +211,9 @@ Future<bool> _verifyServerSettingsAdminPassword(OverlayDialogManager dialogManag
 }
 
 void showServerSettingsWithValue(
-    ServerConfig serverConfig, OverlayDialogManager dialogManager) async {
+    ServerConfig serverConfig,
+    OverlayDialogManager dialogManager,
+    void Function(VoidCallback)? upSetState) async {
   var isInProgress = false;
   final idCtrl = TextEditingController(text: serverConfig.idServer);
   final relayCtrl = TextEditingController(text: serverConfig.relayServer);
@@ -339,6 +343,7 @@ void showServerSettingsWithValue(
             if (await submit()) {
               close();
               showToast(translate('Successful'));
+              upSetState?.call(() {});
             } else {
               showToast(translate('Failed'));
             }
